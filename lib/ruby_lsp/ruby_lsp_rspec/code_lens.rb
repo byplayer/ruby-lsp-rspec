@@ -1,6 +1,8 @@
 # typed: strict
 # frozen_string_literal: true
 
+require "yaml"
+
 module RubyLsp
   module RSpec
     class CodeLens
@@ -26,6 +28,12 @@ module RubyLsp
 
         @base_command = T.let(
           begin
+            conf_path = File.join(Dir.pwd, ".ruby-lsp-rspec")
+            if File.exist?(conf_path)
+              conf = YAML.load_file(conf_path)
+              return conf["command"] if conf["command"] && !conf["command"].empty?
+            end
+
             cmd = if File.exist?(File.join(Dir.pwd, "bin", "rspec"))
               "bin/rspec"
             else
