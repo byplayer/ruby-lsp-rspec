@@ -15,7 +15,7 @@ group :development do
 end
 ```
 
-> [!IMPORTANT] 
+> [!IMPORTANT]
 > Make sure the relevant features are [enabled](https://github.com/Shopify/ruby-lsp/tree/main/vscode#enable-or-disable-features) under your VSCode's `rubyLsp.enabledFeatures` setting, such as `codeLens`.
 
 After running `bundle install`, restart Ruby LSP and you should start seeing CodeLens in your RSpec test files.
@@ -55,6 +55,87 @@ In VS Code this feature can be triggered by one of the following methods:
 > This feature requires indexing your spec files so they can't be excluded from Ruby LSP's indexing.
 
 <img src="misc/go-to-definition.gif" alt="Go to definition" width="75%">
+
+### VS Code Configuration
+
+`ruby-lsp-rspec` can be configured through VS Code's `settings.json` file.
+
+All configuration options must be nested under the `Ruby LSP RSpec` addon within `rubyLsp.addonSettings`:
+
+```json
+{
+  // ...
+  "rubyLsp.addonSettings": {
+    "Ruby LSP RSpec": {
+      // Configuration options go here
+    }
+  }
+}
+```
+
+#### `rspecCommand`
+
+**Description:**
+
+Customize the command used to run tests via CodeLens. If not set, the command will be inferred based on the presence of a binstub or Gemfile.
+
+**Default Value**: `nil`
+
+**Example:**
+
+```json
+{
+  // ...
+  "rubyLsp.addonSettings": {
+    "Ruby LSP RSpec": {
+      "rspecCommand": "rspec -f d"
+    }
+  }
+}
+```
+
+#### `debug`
+
+**Description:**
+
+Enable debug logging. Currently, this only logs the RSpec command used by CodeLens to stderr, which can be viewed in VS Code's `OUTPUT` panel under `Ruby LSP`.
+
+**Default Value**: `false`
+
+**Example:**
+
+```json
+{
+  "rubyLsp.addonSettings": {
+    "Ruby LSP RSpec": {
+      "debug": true
+    }
+  }
+}
+```
+
+### Container Development
+
+When developing in containers, use the official [`Dev Containers`](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension. This ensures Ruby LSP and Ruby LSP RSpec run inside the container, allowing correct spec path resolution.
+
+For detailed container setup instructions, see the [Ruby LSP documentation](https://github.com/Shopify/ruby-lsp/blob/main/vscode/README.md?tab=readme-ov-file#developing-on-containers).
+
+Make sure to configure Ruby LSP to run inside the container by adding it to your `.devcontainer.json`:
+
+```json
+{
+  "name": "my-app",
+  // ...
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Shopify.ruby-lsp",
+        // ...
+      ]
+    }
+  }
+}
+```
 
 ## Development
 
